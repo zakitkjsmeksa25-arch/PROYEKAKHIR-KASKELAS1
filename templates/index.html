@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasKelas - Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 25px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 8px;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #00000010;
+        }
+
+        .card h3 {
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 25px;
+        }
+
+        .green {
+            color: #16a34a;
+        }
+
+        .red {
+            color: #dc2626;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        .history {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eff6ff;
+        }
+
+        @media(max-width: 700px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>KasKelas</h1>
+    <p>Sistem Informasi Keuangan Kas Kelas</p>
+</header>
+
+<div class="container">
+
+    <h2>Dashboard</h2>
+    <p style="margin: 10px 0 25px;">
+        Selamat datang di website KasKelas!
+    </p>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Saldo Kas</h3>
+            <h2 class="blue">Rp 500.000</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Pemasukan</h3>
+            <h2 class="green">Rp 750.000</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Pengeluaran</h3>
+            <h2 class="red">Rp 250.000</h2>
+        </div>
+
+    </div>
+
+    <div class="history">
+        <h2>Riwayat Transaksi</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th>Jenis</th>
+                    <th>Jumlah</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>09-11-2026</td>
+                    <td>Iuran Kas</td>
+                    <td class="green">Pemasukan</td>
+                    <td>Rp 750.000</td>
+                </tr>
+
+                <tr>
+                    <td>09-11-2026</td>
+                    <td>Pembelian Alat Kebersihan</td>
+                    <td class="red">Pengeluaran</td>
+                    <td>Rp 0                                 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
