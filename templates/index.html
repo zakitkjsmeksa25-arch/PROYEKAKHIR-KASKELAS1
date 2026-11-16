@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KasKelas - Dashboard</title>
-
+    <title>KasKelas - Dashboard Bendahara</title>
     <style>
         * {
             margin: 0;
@@ -23,19 +21,15 @@
             background: #2563eb;
             color: white;
             padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        header h1 {
-            font-size: 28px;
-        }
+        header h1 { font-size: 28px; }
+        header p { margin-top: 8px; }
 
-        header p {
-            margin-top: 8px;
-        }
-
-        .container {
-            padding: 25px;
-        }
+        .container { padding: 25px; }
 
         .cards {
             display: grid;
@@ -46,59 +40,58 @@
 
         .card {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 3px 10px #00000010;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
 
-        .card h3 {
-            color: #64748b;
-            margin-bottom: 15px;
-        }
+        .card h3 { color: #64748b; margin-bottom: 10px; font-size: 14px; }
+        .card h2 { font-size: 22px; }
 
-        .card h2 {
-            font-size: 25px;
-        }
+        .green { color: #16a34a; }
+        .blue { color: #2563eb; }
+        .red { color: #dc2626; }
 
-        .green {
-            color: #16a34a;
-        }
-
-        .red {
-            color: #dc2626;
-        }
-
-        .blue {
-            color: #2563eb;
-        }
-
-        .history {
+        .box-section {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
-            overflow-x: auto;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         th, td {
-            padding: 14px;
-            text-align: left;
+            padding: 12px;
+            text-align: center;
             border-bottom: 1px solid #e2e8f0;
         }
 
-        th {
-            background: #eff6ff;
+        th { background: #eff6ff; color: #1e293b; }
+
+        input, select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            margin-right: 10px;
+            font-size: 14px;
         }
 
-        @media(max-width: 700px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
+        button {
+            padding: 8px 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+            border: none;
+        }
+
+        @media(max-width: 800px) {
+            .cards { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -106,63 +99,134 @@
 <body>
 
 <header>
-    <h1>KasKelas</h1>
-    <p>Sistem Informasi Keuangan Kas Kelas</p>
+    <div>
+        <h1>KasKelas</h1>
+        <p>Sistem Informasi Keuangan Kas Kelas SMK</p>
+    </div>
+    <div>
+        <a href="/logout" style="background: #dc2626; color: white; padding: 8px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px;">Logout</a>
+    </div>
 </header>
 
 <div class="container">
 
-    <h2>Dashboard</h2>
-    <p style="margin: 10px 0 25px;">
-        Selamat datang di website KasKelas!
-    </p>
+    <h2>Dashboard Bendahara</h2>
+    <p style="margin: 10px 0 20px;">Kelola iuran kas mingguan dan pengeluaran kelas dengan mudah.</p>
 
+    <!-- Kotak Ringkasan Saldo -->
     <div class="cards">
-
         <div class="card">
-            <h3>Saldo Kas</h3>
-            <h2 class="blue">Rp 500.000</h2>
+            <h3>Sisa Saldo Kas</h3>
+            <h2 class="blue">Rp {{ saldo }}</h2>
         </div>
-
         <div class="card">
             <h3>Total Pemasukan</h3>
-            <h2 class="green">Rp 750.000</h2>
+            <h2 class="green">Rp {{ pemasukan }}</h2>
         </div>
-
         <div class="card">
             <h3>Total Pengeluaran</h3>
-            <h2 class="red">Rp 250.000</h2>
+            <h2 class="red">Rp {{ total_keluar }}</h2>
         </div>
-
     </div>
 
-    <div class="history">
-        <h2>Riwayat Transaksi</h2>
+    <!-- Form Tambah Pengeluaran Kas -->
+    <div class="box-section">
+        <h4>Catat Pengeluaran Baru</h4>
+        <form action="/tambah_pengeluaran" method="POST" style="margin-top: 15px;">
+            <input type="text" name="keterangan" placeholder="Keterangan (cth: Beli Spidol)" required style="width: 300px;">
+            <input type="number" name="jumlah" placeholder="Jumlah (cth: 20000)" required style="width: 180px;">
+            <button type="submit" style="background: #dc2626; color: white;">Simpan Pengeluaran</button>
+        </form>
+    </div>
 
+    <!-- Filter Bulan & Minggu -->
+    <div class="box-section">
+        <form method="GET" action="/">
+            <label><b>Pilih Bulan:</b></label>
+            <select name="bulan" onchange="this.form.submit()">
+                <option value="Agustus" {{ 'selected' if bulan_aktif == 'Agustus' else '' }}>Agustus</option>
+                <option value="September" {{ 'selected' if bulan_aktif == 'September' else '' }}>September</option>
+                <option value="Oktober" {{ 'selected' if bulan_aktif == 'Oktober' else '' }}>Oktober</option>
+                <option value="November" {{ 'selected' if bulan_aktif == 'November' else '' }}>November</option>
+                <option value="Desember" {{ 'selected' if bulan_aktif == 'Desember' else '' }}>Desember</option>
+            </select>
+
+            <label style="margin-left: 15px;"><b>Pilih Minggu:</b></label>
+            <select name="minggu" onchange="this.form.submit()">
+                <option value="1" {{ 'selected' if minggu_aktif == 1 else '' }}>Minggu ke-1</option>
+                <option value="2" {{ 'selected' if minggu_aktif == 2 else '' }}>Minggu ke-2</option>
+                <option value="3" {{ 'selected' if minggu_aktif == 3 else '' }}>Minggu ke-3</option>
+                <option value="4" {{ 'selected' if minggu_aktif == 4 else '' }}>Minggu ke-4</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Tabel Daftar Pembayaran Siswa -->
+    <div class="box-section">
+        <h2>Daftar Pembayaran Siswa ({{ bulan_aktif }} - Minggu ke-{{ minggu_aktif }})</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Tanggal</th>
-                    <th>Keterangan</th>
-                    <th>Jenis</th>
+                    <th>No</th>
+                    <th>Nama Siswa</th>
+                    <th>Bulan</th>
+                    <th>Minggu</th>
+                    <th>Nominal</th>
+                    <th>Status</th>
+                    <th>Aksi Centang</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in kas %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td style="text-align: left; font-weight: bold;">{{ row['nama']}}</td>
+                    <td>{{ row['bulan'] }}</td>
+                    <td>Minggu ke-{{ row['minggu'] }}</td>
+                    <td>Rp 3.000</td>
+                    <td>
+                        <span class="{{ 'green' if row['status'] == 'Lunas' else 'red' }}" style="font-weight: bold;">
+                            {{ row['status'] }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="/ubah/{{ row['id'] }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="bulan" value="{{ bulan_aktif }}">
+                            <input type="hidden" name="minggu" value="{{ minggu_aktif }}">
+                            <button type="submit" style="background-color: {{ '#dcfce7' if row['status'] == 'Belum' else '#fee2e2' }}; color: {{ '#16a34a' if row['status'] == 'Belum' else '#dc2626' }};">
+                                {{ '✔ Centang Lunas' if row['status'] == 'Belum' else '✖ Batalkan' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabel Riwayat Pengeluaran -->
+    <div class="box-section">
+        <h3>Riwayat Pengeluaran Kas Kelas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Keterangan Pengeluaran</th>
                     <th>Jumlah</th>
                 </tr>
             </thead>
-
             <tbody>
+                {% for row in pengeluaran %}
                 <tr>
-                    <td>09-11-2026</td>
-                    <td>Iuran Kas</td>
-                    <td class="green">Pemasukan</td>
-                    <td>Rp 750.000</td>
+                    <td>{{ loop.index }}</td>
+                    <td style="text-align: left;">{{ row['keterangan'] }}</td>
+                    <td class="red" style="font-weight: bold;">Rp {{ row['jumlah'] }}</td>
                 </tr>
-
+                {% else %}
                 <tr>
-                    <td>09-11-2026</td>
-                    <td>Pembelian Alat Kebersihan</td>
-                    <td class="red">Pengeluaran</td>
-                    <td>Rp 0                                 
+                    <td colspan="3">Belum ada pengeluaran kas.</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
